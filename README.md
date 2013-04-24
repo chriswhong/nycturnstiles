@@ -17,3 +17,10 @@ TODO:
 MTA turnstile data is available here:
 
 http://www.mta.info/developers/turnstile.html
+
+
+Update 4/24/2013:
+
+Added Processing Sketch for this animation:  http://www.youtube.com/watch?v=g6EaMQDHu7Q&feature=youtu.be
+
+Added geocodedstations.csv - This is the answer key for mapping MTA turnstile data.  It was hand-jammed on 4/23/2013 with help from Mala Hertz
