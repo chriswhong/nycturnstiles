@@ -7,7 +7,7 @@ $tfile = ARGV[0]
 $count=1
 
 readfile = CSV.open $tfile, "r"
-writefile = File.open "output.txt","a"
+writefile = File.open "mod_"+$tfile,"a"
 		readfile.each do |t|
 			controlArea = t[0]
 			remoteUnit = t[1]
