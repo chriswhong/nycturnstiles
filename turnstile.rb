@@ -1,10 +1,12 @@
+#!/usr/bin/env ruby
+
 require "csv"
 require "fileutils.rb"
 
 $tfile = ARGV[0]
 $count=1
 
-readfile = CSV.open $tfile
+readfile = CSV.open $tfile, "r"
 writefile = File.open "output.txt","a"
 		readfile.each do |t|
 			controlArea = t[0]
