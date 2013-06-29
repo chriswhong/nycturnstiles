@@ -37,6 +37,10 @@ readfile = CSV.open $tfile, "r"
 		#de-duped and sort array of dates [compaction may be necessary to eliminate nil values]
 		$dates.uniq!.sort!
 		
+		#strip any dates that aren't :00:00 hour times.
+		$dates.delete_if{ |z| z !~ /:00:00/ }
+		
+		
 		#puts "date array complete"
 		#puts $dates
 
