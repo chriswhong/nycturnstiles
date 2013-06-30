@@ -14,4 +14,4 @@ Based on @louiedog98's original turnstile script, I created three new scripts an
 
 <strong>Note:</strong> Because I'm only using REGULAR, on-hour audit events, there are a few issues with the resulting data (notice how there is some data missing on Thursday?) - but I'm working on it!
 
-![r021_13_02_09_plot](https://f.cloud.github.com/assets/1568188/726495/59e635c4-e100-11e2-96fd-68d4426e58f3.png)
+![r021_13_02_09_plot](https://raw.github.com/nealrs/MTA-Turnstile-Data/master/example/R021_13_02_09_plot.png)
