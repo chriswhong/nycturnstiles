@@ -93,7 +93,7 @@ writefile = File.open "chartdata_"+station+"_"+startdate+"_"+enddate+".csv","a"
 	plot = Hash.new(0)
 	while $count < ($dates.length-1) do
 		
-			plot[[$count,"interval"]] = table2[[$count+1,"date"]].to_s + " - " + table2[[$count,"date"]].to_s
+			plot[[$count,"interval"]] = table2[[$count,"date"]].to_s + " - " + table2[[$count+1,"date"]].to_s
 			plot[[$count,"entries"]] = table2[[$count+1,"entries"]] - table2[[$count,"entries"]]
 			plot[[$count,"exits"]] = table2[[$count+1,"exits"]] - table2[[$count,"exits"]]
 			
