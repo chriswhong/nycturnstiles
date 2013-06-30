@@ -1,26 +1,21 @@
-nycturnstiles
-=============
+Based on Chris Whong's <a href="https://github.com/louiedog98/nycturnstiles">original project</a>, these scripts take <a href="http://www.mta.info/developers/turnstile.html">raw MTA turnstile data files</a> and  generate plot ready data for charting turnstile traffic at any station. And yep, an online interface is next on the docket - so stay tuned!
 
-Scripts that tinker with the MTA's turnstile data
+<ul>
 
-turnstile.rb parses the oh-so-ugly format that the MTA delivers turnstile data in and makes each reading into a single line with the following columns:
+  <li><strong>load_db.rb</strong> takes a raw <a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/turnstile_130209.txt">turnstile file</a>, strips out non-'REGULAR' audit events, and stores it in a MySQL database. Obviously - you'll want to change the db parameters to reflect your own.</li> 
 
-Control Area, Remote Unit, SCP, Date, Time, Type, Entries, and Exits
+	<li><strong>get_data.rb</strong> takes 3 parameters: remoteUnit code, start, and end date, (e.g './get_data.rb R021 2013-02-02 2013-02-08' for Bryant Park), queries the db, and exports two data files: 
 
-Pass it a turnstile file as an argument and it will spit out output.txt
+	<ol>
+		<li>A <a href="https://github.com/nealrs/MTA/blob/db/example/R021_2013-02-02_2013-02-09.csv">CSV</a> summary of the cumulative entry & exit traffic for each audit event. Paste this into the included <a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/plot_template.xlsx">spreadsheet</a> to create charts like the one shown below.</li>
+		
+		<li>A <a href="https://github.com/nealrs/MTA/blob/db/example/chartdata_R021_2013-02-02_2013-02-09.csv">CSV</a> of plot ready data suitable for any charting software/API.</li>
+	</ol>
+	
+	</li>
 
-TODO: 
+</ul>
 
--Add station names based on Remote Unit Lookup
--Consolidate
+<strong>Note:</strong> Because the scripts strip non-'REGULAR' & off-hour audit events, there are a few issues with the resulting data (notice how there is some data missing for Thursday?) - but I'm working on it!
 
-MTA turnstile data is available here:
-
-http://www.mta.info/developers/turnstile.html
-
-
-Update 4/24/2013:
-
-Added Processing Sketch for this animation:  http://www.youtube.com/watch?v=g6EaMQDHu7Q&feature=youtu.be
-
-Added geocodedstations.csv - This is the answer key for mapping MTA turnstile data.  It was hand-jammed on 4/23/2013 with help from Mala Hertz
+![r021_13_02_09_plot](https://raw.github.com/nealrs/MTA-Turnstile-Data/master/example/R021_13_02_09_plot.png)
