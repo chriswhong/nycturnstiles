@@ -1,17 +1,21 @@
-Based on @louiedog98's original turnstile script, I created three new scripts and a spreadsheet template, which enable you to transform a <a href="http://www.mta.info/developers/turnstile.html">raw data file</a> into a chart illustrating turnstile traffic at any MTA station. Obviously this can use some refactoring so it's a single script (and an interface for that matter), but this is a useable option for anyone familiar with the console.
+Based on Chris Whong's <a href="https://github.com/louiedog98/nycturnstiles">original project</a>, these scripts take <a href="http://www.mta.info/developers/turnstile.html">raw MTA turnstile data files</a> and  generate plot ready data for charting turnstile traffic at any station. And yep, an online interface is next on the docket - so stay tuned!
 
-<ol>
+<ul>
 
-<li>Run <strong>regularize.rb</strong> on a raw turnstile file (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/turnstile_130209.txt">turnstile_130209.txt</a>) to remove the 8x multiplexing and eliminate any non-'REGULAR' audit events.</li>
+  <li><strong>load_db.rb</strong> takes a raw <a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/turnstile_130209.txt">turnstile file</a>, strips out non-'REGULAR' audit events, and stores it in a MySQL database. Obviously - you'll want to change the db parameters to reflect your own.</li> 
 
-<li>Run  <strong>one_station.rb</strong> on the resulting file (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/reg_turnstile_130209.txt">reg_turnstile_130209.txt</a>) & input the desired station / remoteUnit code (e.g R021 for Bryant Park. This will write out the station specific turnstile data. This takes a little while because it's looping over everything, so be patient. The script prints 'Dunzo' to the console once it's complete.</li>
+	<li><strong>get_data.rb</strong> takes 3 parameters: remoteUnit code, start, and end date, (e.g './get_data.rb R021 2013-02-02 2013-02-08' for Bryant Park), queries the db, and exports two data files: 
 
-<li>Run  <strong>compile_station.rb</strong> on the resulting file (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/R021_reg_turnstile_130209.txt">R021_reg_turnstile_130209.txt</a>) to setup the charting data. The script first establishes a unique, sorted, set of datetime codes - and then it strips out any irregular audit times (e.g 4:15:09) so that it always represents 4 hour intervals. Next, it loops through the one_station data and sums entries & exits (across all scp codes) for each datetime. And of course, it writes out everything to a new file.</li>
+	<ol>
+		<li>A <a href="https://github.com/nealrs/MTA/blob/db/example/R021_2013-02-02_2013-02-09.csv">CSV</a> summary of the cumulative entry & exit traffic for each audit event. Paste this into the included <a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/plot_template.xlsx">spreadsheet</a> to create charts like the one shown below.</li>
+		
+		<li>A <a href="https://github.com/nealrs/MTA/blob/db/example/chartdata_R021_2013-02-02_2013-02-09.csv">CSV</a> of plot ready data suitable for any charting software/API.</li>
+	</ol>
+	
+	</li>
 
-<li>Finally, it's chart time. Follow the instructions in <strong><a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/plot_template.xlsx">plot_template.xlsx</a></strong> and paste in the chart data (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/sum_R021_reg_turnstile_130209.txt">sum_R021_reg_turnstile130209.txt</a>) to plot the data as shown below.</li>
+</ul>
 
-</ol>
-
-<strong>Note:</strong> Because I'm only using REGULAR, on-hour audit events, there are a few issues with the resulting data (notice how there is some data missing on Thursday?) - but I'm working on it!
+<strong>Note:</strong> Because the scripts strip non-'REGULAR' & off-hour audit events, there are a few issues with the resulting data (notice how there is some data missing for Thursday?) - but I'm working on it!
 
 ![r021_13_02_09_plot](https://raw.github.com/nealrs/MTA-Turnstile-Data/master/example/R021_13_02_09_plot.png)
