@@ -8,7 +8,7 @@ Based on @louiedog98's original turnstile script, I created three new scripts an
 
 <li>Run  <strong>compile_station.rb</strong> on the resulting file (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/R021_reg_turnstile_130209.txt">R021_reg_turnstile_130209.txt</a>) to setup the charting data. The script first establishes a unique, sorted, set of datetime codes - and then it strips out any irregular audit times (e.g 4:15:09) so that it always represents 4 hour intervals. Next, it loops through the one_station data and sums entries & exits (across all scp codes) for each datetime. And of course, it writes out everything to a new file.</li>
 
-<li>Finally, it's chart time. Follow the instructions in <strong><a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/plot_template.xlsx">plot_template.xlsx</a></strong> and paste in the chart data (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/sum_R021_reg_turnstile_130209.txt">sum_R021_reg_turnstile120209.txt</a>) to plot the data as shown below.</li>
+<li>Finally, it's chart time. Follow the instructions in <strong><a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/plot_template.xlsx">plot_template.xlsx</a></strong> and paste in the chart data (<a href="https://github.com/nealrs/MTA-Turnstile-Data/blob/master/example/sum_R021_reg_turnstile_130209.txt">sum_R021_reg_turnstile130209.txt</a>) to plot the data as shown below.</li>
 
 </ol>
 
