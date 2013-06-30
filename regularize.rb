@@ -34,7 +34,7 @@ writefile = File.open "reg_"+$tfile,"a"
 					datetime_string = (date + " " + time)					
 					#format = "%m-%d-%y %H:%M:%S"
 					
-					# datetime is more important sorting criteria than the scp code, especially since we're just going to sum across ass scps. 
+					# datetime is more important sorting criteria than the scp code, especially since we're just going to sum across all scps. 
 					# and i'm not sure controlArea matters at all, but we'll keep it for now
 					writefile.puts controlArea + "," + remoteUnit + "," + datetime_string + "," + scp + "," + entries + "," + exits
 					puts $count.to_s() + " " + controlArea + "," + remoteUnit + "," + datetime_string + "," + scp + "," + entries + "," + exits
