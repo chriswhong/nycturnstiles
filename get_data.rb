@@ -21,11 +21,11 @@ enddate = ARGV[2]   # add 1 day to end date programmatically and convert back to
 	enddate = (Time.parse("'"+enddate+" 00:00:00'") + (60 * 60 * 24)).strftime(timeFmtStr)
 
 #Set db session variables -- REPLACE THESE WITH YOUR OWN DB CREDENTIALS 
-@host = "mta.nealshyam.com"
-@user = "ns_mta"
-@pass = "ranc1dm3at"
-@db = "turnstile"
-@table = "main"
+@host = ""
+@user = ""
+@pass = ""
+@db = ""
+@table = ""
 
 $dates = Array.new
 table = Hash.new(0)

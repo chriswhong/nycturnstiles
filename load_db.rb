@@ -14,11 +14,11 @@ $count=1
 readfile = CSV.open $tfile, "r"
 
 #Set db session variables -- REPLACE THESE WITH YOUR OWN DB CREDENTIALS 
-@host = "mta.nealshyam.com"
-@user = "ns_mta"
-@pass = "ranc1dm3at"
-@db = "turnstile"
-@table = "main"
+@host = ""
+@user = ""
+@pass = ""
+@db = ""
+@table = ""
 
 # open db connection
 con = Mysql.connect(@host, @user, @pass, @db)
