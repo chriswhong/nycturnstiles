@@ -18,4 +18,4 @@ Based on Chris Whong's <a href="https://github.com/louiedog98/nycturnstiles">ori
 
 <strong>Note:</strong> Because the scripts strip non-'REGULAR' & off-hour audit events, there are a few issues with the resulting data (notice how there is some data missing for Thursday?) - but I'm working on it!
 
-![r021_13_02_09_plot](https://raw.github.com/nealrs/MTA-Turnstile-Data/master/example/R021_13_02_09_plot.png)
+![r021_13_02_09_plot](https://raw.github.com/nealrs/MTA/master/example/R021_13_02_09_plot%20copy.png)
