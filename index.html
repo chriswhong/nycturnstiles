@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MTA Turnstile Traffic - @nealrs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/daterangepicker.css" rel="stylesheet">
+    <link href="css/xcharts.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+	<script type="text/javascript" src="js/daterangepicker.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/xcharts.min.js"></script>
+	<script type="text/javascript" src="js/miscfunc.js"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  
+  
+  <!----- SHARE THIS ----->
+  	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "ur-7520ac9b-63c9-36e9-1e0c-25421b29a216", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+  <!----- SHARE THIS ----->
+  
+  
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">MTA Turnstile Traffic</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a class = "tip" data-toggle="tooltip" title="Hi, I'm Neal Shyam" href="http://www.nealshyam.com" target="_blank">&copy; 2013 Neal</a></li>
+             <!--- <li><a class = "tip" data-toggle="tooltip" title="I did this for fun!" href="#about">About</a></li>--->
+              <li><a class = "tip" data-toggle="tooltip" title="Tell me what I can do better!" href="mailto:me@nealshyam.com?subject=MTA%20Turnstile%20Data" target="_blank">Feedback</a></li>
+              <li><a class = "tip" data-toggle="tooltip" title="Share this with your friends!"><span class='st_facebook_hcount' displayText='Facebook'></span> <span class='st_twitter_hcount' displayText='Tweet'></span> <span class='st_linkedin_hcount' displayText='LinkedIn'></span> <span class='st_pinterest_hcount' displayText='Pinterest'></span> <span class='st_email_hcount' displayText='Email'></span></a></li>
+
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="container" id = "maincont">
+      <div class="row"> <!--- chart controls --->
+      	<form class="form-inline span12" id ="form">
+      		<!--<span class="control-level" for ="station">Station:</span>-->
+      		<i class="icon-map-marker"></i> </span>	
+      			<!--- populate using a db query (pull station codes + station names) & set selected based on db query too--->
+      			<!--- maybe find station using map or "find station by train line" or something like that.--->
+      		<select name = "remote"> 	
+      			<!--<option value="">Select Station</option>-->
+      			<option value="">Select Station Remote Code</option>
+      			<option value="R248">1 AVE - R248</option>
+				<option value="R191">103 ST - R191</option>
+				<option value="R314">103 ST - R314</option>
+				<option value="R180">103 ST - R180</option>
+				<option value="R208">103 ST-CORONA - R208</option>
+				<option value="R007">104 ST - R007</option>
+				<option value="R181">110 ST - R181</option>
+				<option value="R192">110 ST-CATHEDRL - R192</option>
+				<option value="R323">110 ST-CPN - R323</option>
+				<option value="R310">111 ST - R310</option>
+				<option value="R008">111 ST - R008</option>
+				<option value="R333">116 ST - R333</option>
+				<option value="R324">116 ST - R324</option>
+				<option value="R182">116 ST - R182</option>
+				<option value="R159">116 ST-COLUMBIA - R159</option>
+				<option value="R009">121 ST - R009</option>
+				<option value="R034">125 ST - R034</option>
+				<option value="R102">125 ST - R102</option>
+				<option value="R206">125 ST - R206</option>
+				<option value="R132">125 ST - R132</option>
+				<option value="R332">135 ST - R332</option>
+				<option value="R207">135 ST - R207</option>
+				<option value="R169">137 ST-CITY COL - R169</option>
+				<option value="R445">138 ST-3 AVE - R445</option>
+				<option value="R307">138 ST-GR CONC - R307</option>
+				<option value="R175">14 ST - R175</option>
+				<option value="R105">14 ST - R105</option>
+				<option value="R163">14 ST-6 AVE - R163</option>
+				<option value="R170">14 ST-UNION SQ - R170</option>
+				<option value="R273">145 ST - R273</option>
+				<option value="R101">145 ST - R101</option>
+				<option value="R344">145 ST - R344</option>
+				<option value="R345">148 ST-LENOX - R345</option>
+				<option value="R053">149 ST-3 AVE - R053</option>
+				<option value="R205">149 ST-GR CONC - R205</option>
+				<option value="R545">14TH STREET - R545</option>
+				<option value="R241">15 ST-PROSPECT - R241</option>
+				<option value="R331">155 ST - R331</option>
+				<option value="R315">155 ST - R315</option>
+				<option value="R193">157 ST - R193</option>
+				<option value="R195">161 ST-YANKEE - R195</option>
+				<option value="R296">163 ST-AMSTERDM - R296</option>
+				<option value="R221">167 ST - R221</option>
+				<option value="R104">167 ST - R104</option>
+				<option value="R035">168 ST-BROADWAY - R035</option>
+				<option value="R115">169 ST - R115</option>
+				<option value="R243">170 ST - R243</option>
+				<option value="R443">170 ST - R443</option>
+				<option value="R386">174 ST - R386</option>
+				<option value="R253">174-175 ST - R253</option>
+				<option value="R126">175 ST - R126</option>
+				<option value="R309">176 ST - R309</option>
+				<option value="R372">18 AVE - R372</option>
+				<option value="R392">18 AVE - R392</option>
+				<option value="R242">18 AVE - R242</option>
+				<option value="R321">18 ST - R321</option>
+				<option value="R174">181 ST - R174</option>
+				<option value="R260">181 ST - R260</option>
+				<option value="R237">182-183 ST - R237</option>
+				<option value="R275">183 ST - R275</option>
+				<option value="R280">190 ST - R280</option>
+				<option value="R274">191 ST - R274</option>
+				<option value="R300">2 AVE - R300</option>
+				<option value="R076">2 BDWY CUST SRV - R076</option>
+				<option value="R373">20 AVE - R373</option>
+				<option value="R393">20 AVE - R393</option>
+				<option value="R037">207 ST - R037</option>
+				<option value="R303">21 ST - R303</option>
+				<option value="R038">215 ST - R038</option>
+				<option value="R365">219 ST - R365</option>
+				<option value="R422">22 AVE-BAY PKY - R422</option>
+				<option value="R366">225 ST - R366</option>
+				<option value="R111">23 ST - R111</option>
+				<option value="R190">23 ST - R190</option>
+				<option value="R131">23 ST - R131</option>
+				<option value="R083">23 ST-5 AVE - R083</option>
+				<option value="R203">23 ST-6 AVE - R203</option>
+				<option value="R453">23 ST-6 AVE - R453</option>
+				<option value="R040">231 ST - R040</option>
+				<option value="R367">233 ST - R367</option>
+				<option value="R306">238 ST - R306</option>
+				<option value="R117">242 ST - R117</option>
+				<option value="R399">25 AVE - R399</option>
+				<option value="R278">25 ST - R278</option>
+				<option value="R455">25 ST - R455</option>
+				<option value="R272">28 ST - R272</option>
+				<option value="R143">28 ST - R143</option>
+				<option value="R082">28 ST-BROADWAY - R082</option>
+				<option value="R330">3 AVE - R330</option>
+				<option value="R176">33 ST - R176</option>
+				<option value="R291">33 ST/RAWSON ST - R291</option>
+				<option value="R022">34 ST-HERALD SQ - R022</option>
+				<option value="R023">34 ST-HERALD SQ - R023</option>
+				<option value="R012">34 ST-PENN STA - R012</option>
+				<option value="R013">34 ST-PENN STA - R013</option>
+				<option value="R293">34 ST-PENN STA - R293</option>
+				<option value="R031">34 ST-PENN STA - R031</option>
+				<option value="R197">36 ST - R197</option>
+				<option value="R339">36 ST - R339</option>
+				<option value="R258">4 AVE - R258</option>
+				<option value="R261">40 ST-LOWERY ST - R261</option>
+				<option value="R021">42 ST-BRYANT PK - R021</option>
+				<option value="R045">42 ST-GRD CNTRL - R045</option>
+				<option value="R046">42 ST-GRD CNTRL - R046</option>
+				<option value="R047">42 ST-GRD CNTRL - R047</option>
+				<option value="R048">42 ST-GRD CNTRL - R048</option>
+				<option value="R010">42 ST-PA BUS TE - R010</option>
+				<option value="R011">42 ST-PA BUS TE - R011</option>
+				<option value="R032">42 ST-TIMES SQ - R032</option>
+				<option value="R033">42 ST-TIMES SQ - R033</option>
+				<option value="R232">45 ST - R232</option>
+				<option value="R267">46 ST - R267</option>
+				<option value="R223">46 ST-BLISS ST - R223</option>
+				<option value="R020">47-50 ST-ROCK - R020</option>
+				<option value="R081">49 ST-7 AVE - R081</option>
+				<option value="R015">5 AVE-53 ST - R015</option>
+				<option value="R079">5 AVE-59 ST - R079</option>
+				<option value="R054">5 AVE-BRYANT PK - R054</option>
+				<option value="R234">50 ST - R234</option>
+				<option value="R188">50 ST - R188</option>
+				<option value="R116">50 ST - R116</option>
+				<option value="R049">51 ST - R049</option>
+				<option value="R327">52 ST-LINCOLN - R327</option>
+				<option value="R233">53 ST - R233</option>
+				<option value="R247">55 ST - R247</option>
+				<option value="R302">57 ST - R302</option>
+				<option value="R080">57 ST-7 AVE - R080</option>
+				<option value="R212">59 ST - R212</option>
+				<option value="R050">59 ST - R050</option>
+				<option value="R051">59 ST - R051</option>
+				<option value="R084">59 ST-COLUMBUS - R084</option>
+				<option value="R163">6 AVE - R163</option>
+				<option value="R147">61 ST/WOODSIDE - R147</option>
+				<option value="R202">63 DR-REGO PARK - R202</option>
+				<option value="R340">65 ST - R340</option>
+				<option value="R164">66 ST-LINCOLN - R164</option>
+				<option value="R219">67 AVE - R219</option>
+				<option value="R177">68ST-HUNTER COL - R177</option>
+				<option value="R347">69 ST-FISK AVE - R347</option>
+				<option value="R288">7 AV-PARK SLOPE - R288</option>
+				<option value="R171">7 AVE - R171</option>
+				<option value="R113">7 AVE-53 ST - R113</option>
+				<option value="R370">71 ST - R370</option>
+				<option value="R452">72 ST - R452</option>
+				<option value="R281">72 ST - R281</option>
+				<option value="R018">74 ST-BROADWAY - R018</option>
+				<option value="R341">75 AVE - R341</option>
+				<option value="R214">77 ST - R214</option>
+				<option value="R178">77 ST - R178</option>
+				<option value="R371">79 ST - R371</option>
+				<option value="R166">79 ST - R166</option>
+				<option value="R390">8 AVE - R390</option>
+				<option value="R175">8 AVE - R175</option>
+				<option value="R085">8 ST-B'WAY NYU - R085</option>
+				<option value="R187">81 ST-MUSEUM - R187</option>
+				<option value="R096">82 ST-JACKSON H - R096</option>
+				<option value="R215">86 ST - R215</option>
+				<option value="R397">86 ST - R397</option>
+				<option value="R167">86 ST - R167</option>
+				<option value="R186">86 ST - R186</option>
+				<option value="R179">86 ST - R179</option>
+				<option value="R368">9 AVE - R368</option>
+				<option value="R258">9 ST - R258</option>
+				<option value="R122">90 ST-ELMHURST - R122</option>
+				<option value="R168">96 ST - R168</option>
+				<option value="R251">96 ST - R251</option>
+				<option value="R144">96 ST - R144</option>
+				<option value="R547">9TH STREET - R547</option>
+				<option value="R433">ALABAMA AVE - R433</option>
+				<option value="R362">ALLERTON AVE - R362</option>
+				<option value="R464">AQUEDUCT TRACK - R464</option>
+				<option value="R357">AQUEDUCT-N CNDT - R357</option>
+				<option value="R160">ASTOR PLACE - R160</option>
+				<option value="R057">ATLANTIC AVE - R057</option>
+				<option value="R348">ATLANTIC AVE - R348</option>
+				<option value="R263">AVE H - R263</option>
+				<option value="R421">AVE I - R421</option>
+				<option value="R228">AVE J - R228</option>
+				<option value="R229">AVE M - R229</option>
+				<option value="R423">AVE N - R423</option>
+				<option value="R424">AVE P - R424</option>
+				<option value="R396">AVE U - R396</option>
+				<option value="R425">AVE U - R425</option>
+				<option value="R150">AVE U - R150</option>
+				<option value="R271">AVE X - R271</option>
+				<option value="R400">BAY 50 ST - R400</option>
+				<option value="R374">BAY PARKWAY - R374</option>
+				<option value="R394">BAY PKY-22 AVE - R394</option>
+				<option value="R213">BAY RIDGE AVE - R213</option>
+				<option value="R216">BAY RIDGE-95 ST - R216</option>
+				<option value="R292">BAYCHESTER AVE - R292</option>
+				<option value="R418">BEACH 105 ST - R418</option>
+				<option value="R358">BEACH 25 ST - R358</option>
+				<option value="R338">BEACH 36 ST - R338</option>
+				<option value="R337">BEACH 44 ST - R337</option>
+				<option value="R336">BEACH 60 ST - R336</option>
+				<option value="R335">BEACH 67 ST - R335</option>
+				<option value="R416">BEACH 90 ST - R416</option>
+				<option value="R417">BEACH 98 ST - R417</option>
+				<option value="R235">BEDFORD AVE - R235</option>
+				<option value="R183">BEDFORD PARK BL - R183</option>
+				<option value="R156">BEDFORD PARK BL - R156</option>
+				<option value="R269">BEDFORD/NOSTRAN - R269</option>
+				<option value="R090">BEEBE-39 AVE - R090</option>
+				<option value="R129">BERGEN ST - R129</option>
+				<option value="R058">BERGEN ST - R058</option>
+				<option value="R262">BEVERLEY ROAD - R262</option>
+				<option value="R210">BEVERLY ROAD - R210</option>
+				<option value="R194">BLEECKER ST - R194</option>
+				<option value="R108">BOROUGH HALL/CT - R108</option>
+				<option value="R412">BOTANIC GARDEN - R412</option>
+				<option value="R311">BOWERY - R311</option>
+				<option value="R041">BOWLING GREEN - R041</option>
+				<option value="R042">BOWLING GREEN - R042</option>
+				<option value="R384">BOYD-88 ST - R384</option>
+				<option value="R172">BRIGHTON BEACH - R172</option>
+				<option value="R415">BROAD CHANNEL - R415</option>
+				<option value="R125">BROAD ST - R125</option>
+				<option value="R299">BROADWAY - R299</option>
+				<option value="R092">BROADWAY-31 ST - R092</option>
+				<option value="R103">BROADWAY-ENY - R103</option>
+				<option value="R461">BROADWAY/LAFAY - R461</option>
+				<option value="R389">BRONX PARK EAST - R389</option>
+				<option value="R446">BROOK AVE - R446</option>
+				<option value="R044">BROOKLYN BRIDGE - R044</option>
+				<option value="R428">BUHRE AVE - R428</option>
+				<option value="R363">BURKE AVE - R363</option>
+				<option value="R244">BURNSIDE AVE - R244</option>
+				<option value="R313">BUSHWICK AVE - R313</option>
+				<option value="R320">CANAL ST - R320</option>
+				<option value="R139">CANAL ST - R139</option>
+				<option value="R462">CANAL ST - R462</option>
+				<option value="R463">CANAL ST - R463</option>
+				<option value="R118">CANAL ST - R118</option>
+				<option value="R220">CARROLL ST - R220</option>
+				<option value="R106">CASTLE HILL AVE - R106</option>
+				<option value="R334">CATHEDRL-110 ST - R334</option>
+				<option value="R401">CENTRAL AVE - R401</option>
+				<option value="R030">CHAMBERS ST - R030</option>
+				<option value="R029">CHAMBERS ST - R029</option>
+				<option value="R044">CHAMBERS ST - R044</option>
+				<option value="R432">CHAUNCEY ST - R432</option>
+				<option value="R189">CHRISTOPHER ST - R189</option>
+				<option value="R548">CHRISTOPHER ST - R548</option>
+				<option value="R204">CHURCH AVE - R204</option>
+				<option value="R098">CHURCH AVE - R098</option>
+				<option value="R109">CHURCH AVE - R109</option>
+				<option value="R550">CITY / BUS - R550</option>
+				<option value="R224">CLARK ST - R224</option>
+				<option value="R287">CLASSON AVE - R287</option>
+				<option value="R435">CLEVELAND ST - R435</option>
+				<option value="R317">CLINTON-WASH AV - R317</option>
+				<option value="R284">CLINTON-WASH AV - R284</option>
+				<option value="R184">CORTELYOU ROAD - R184</option>
+				<option value="R305">CORTLANDT ST - R305</option>
+				<option value="R088">CORTLANDT ST - R088</option>
+				<option value="R346">COURT SQ - R346</option>
+				<option value="R359">COURT SQ - R359</option>
+				<option value="R359">COURT SQ-23 ST - R359</option>
+				<option value="R437">CRESCENT ST - R437</option>
+				<option value="R062">CROWN HTS-UTICA - R062</option>
+				<option value="R447">CYPRESS AVE - R447</option>
+				<option value="R003">CYPRESS HILLS - R003</option>
+				<option value="R099">DEKALB AVE - R099</option>
+				<option value="R236">DEKALB AVE - R236</option>
+				<option value="R142">DELANCEY ST - R142</option>
+				<option value="R095">DITMARS BL-31 S - R095</option>
+				<option value="R420">DITMAS AVE - R420</option>
+				<option value="R036">DYCKMAN ST - R036</option>
+				<option value="R185">DYCKMAN-200 ST - R185</option>
+				<option value="R431">DYRE AVE - R431</option>
+				<option value="R448">E 143 ST - R448</option>
+				<option value="R449">E 149 ST - R449</option>
+				<option value="R222">E 177 ST-PARKCH - R222</option>
+				<option value="R388">E 180 ST - R388</option>
+				<option value="R387">E TREMONT AVE - R387</option>
+				<option value="R376">EAST 105 ST - R376</option>
+				<option value="R257">EAST BROADWAY - R257</option>
+				<option value="R060">EASTERN PKWY - R060</option>
+				<option value="R162">ELDER AVE - R162</option>
+				<option value="R004">ELDERTS LANE - R004</option>
+				<option value="R218">ELMHURST AVE - R218</option>
+				<option value="R470">ELTINGVILLE PK - R470</option>
+				<option value="R142">ESSEX ST - R142</option>
+				<option value="R200">EUCLID AVE - R200</option>
+				<option value="R543">EXCHANGE PLACE - R543</option>
+				<option value="R285">FAR ROCKAWAY - R285</option>
+				<option value="R110">FLATBUSH AVE - R110</option>
+				<option value="R316">FLUSHING AVE - R316</option>
+				<option value="R377">FLUSHING AVE - R377</option>
+				<option value="R119">FORDHAM ROAD - R119</option>
+				<option value="R112">FORDHAM ROAD - R112</option>
+				<option value="R403">FOREST AVE - R403</option>
+				<option value="R141">FOREST HILLS-71 - R141</option>
+				<option value="R005">FOREST PARKWAY - R005</option>
+				<option value="R123">FRANKLIN AVE - R123</option>
+				<option value="R297">FRANKLIN AVE - R297</option>
+				<option value="R343">FRANKLIN ST - R343</option>
+				<option value="R409">FREEMAN ST - R409</option>
+				<option value="R404">FRESH POND ROAD - R404</option>
+				<option value="R391">FT HAMILTON PKY - R391</option>
+				<option value="R369">FT HAMILTON PKY - R369</option>
+				<option value="R289">FT HAMILTON PKY - R289</option>
+				<option value="R002">FULTON ST - R002</option>
+				<option value="R014">FULTON ST - R014</option>
+				<option value="R028">FULTON ST - R028</option>
+				<option value="R318">FULTON ST - R318</option>
+				<option value="R380">GATES AVE - R380</option>
+				<option value="R249">GRAHAM AVE - R249</option>
+				<option value="R059">GRAND ARMY PLAZ - R059</option>
+				<option value="R254">GRAND AV-NEWTON - R254</option>
+				<option value="R240">GRAND ST - R240</option>
+				<option value="R250">GRAND ST - R250</option>
+				<option value="R093">GRAND-30 AVE - R093</option>
+				<option value="R382">GRANT AVE - R382</option>
+				<option value="R239">GREENPOINT AVE - R239</option>
+				<option value="R355">GREENWOOD-111 - R355</option>
+				<option value="R551">GROVE STREET - R551</option>
+				<option value="R226">GUN HILL ROAD - R226</option>
+				<option value="R364">GUN HILL ROAD - R364</option>
+				<option value="R381">HALSEY ST - R381</option>
+				<option value="R266">HALSEY ST - R266</option>
+				<option value="R544">HARRISON - R544</option>
+				<option value="R352">HEWES ST - R352</option>
+				<option value="R252">HIGH ST - R252</option>
+				<option value="R290">HOUSTON ST - R290</option>
+				<option value="R414">HOWARD BCH-JFK - R414</option>
+				<option value="R225">HOYT ST - R225</option>
+				<option value="R456">HOYT ST - R456</option>
+				<option value="R094">HOYT ST-ASTORIA - R094</option>
+				<option value="R217">HOYT/SCHERMER - R217</option>
+				<option value="R383">HUDSON-80 ST - R383</option>
+				<option value="R134">HUNTERS PT AVE - R134</option>
+				<option value="R146">HUNTS POINT AVE - R146</option>
+				<option value="R407">INTERVALE-163 - R407</option>
+				<option value="R173">INWOOD-207 ST - R173</option>
+				<option value="R405">JACKSON AVE - R405</option>
+				<option value="R025">JAMAICA CENTER - R025</option>
+				<option value="R019">JAMAICA-179 ST - R019</option>
+				<option value="R342">JAMAICA-VAN WYC - R342</option>
+				<option value="R127">JAY ST-METROTEC - R127</option>
+				<option value="R089">JAY ST-METROTEC - R089</option>
+				<option value="R279">JEFFERSON ST - R279</option>
+				<option value="R535">JFK HOWARD BCH - R535</option>
+				<option value="R536">JFK JAMAICA CT1 - R536</option>
+				<option value="R537">JFK JAMAICA CT2 - R537</option>
+				<option value="R552">JOURNAL SQUARE - R552</option>
+				<option value="R097">JUNCTION BLVD - R097</option>
+				<option value="R066">JUNIUS ST - R066</option>
+				<option value="R395">KINGS HIGHWAY - R395</option>
+				<option value="R130">KINGS HIGHWAY - R130</option>
+				<option value="R211">KINGS HIGHWAY - R211</option>
+				<option value="R161">KINGSBRIDGE RD - R161</option>
+				<option value="R155">KINGSBRIDGE RD - R155</option>
+				<option value="R124">KINGSTON AVE - R124</option>
+				<option value="R199">KINGSTON-THROOP - R199</option>
+				<option value="R413">KNICKERBOCKER - R413</option>
+				<option value="R379">KOSCIUSZKO ST - R379</option>
+				<option value="R550">LACKAWANNA - R550</option>
+				<option value="R283">LAFAYETTE AVE - R283</option>
+				<option value="R356">LEFFERTS BLVD - R356</option>
+				<option value="R050">LEXINGTON AVE - R050</option>
+				<option value="R051">LEXINGTON AVE - R051</option>
+				<option value="R319">LEXINGTON AVE - R319</option>
+				<option value="R016">LEXINGTON-53 ST - R016</option>
+				<option value="R017">LEXINGTON-53 ST - R017</option>
+				<option value="R538">LGA AIRPORT CTB - R538</option>
+				<option value="R526">LIB-HEMPSTEAD - R526</option>
+				<option value="R440">LIBERTY AVE - R440</option>
+				<option value="R350">LIVONIA AVE - R350</option>
+				<option value="R450">LONGWOOD AVE - R450</option>
+				<option value="R268">LORIMER ST - R268</option>
+				<option value="R353">LORIMER ST - R353</option>
+				<option value="R055">MAIN ST - R055</option>
+				<option value="R039">MARBLE HILL-225 - R039</option>
+				<option value="R460">MARCY AVE - R460</option>
+				<option value="R457">METROCARD BUS 1 - R457</option>
+				<option value="R458">METROCARD BUS 2 - R458</option>
+				<option value="R465">METROCARD VAN-1 - R465</option>
+				<option value="R466">METROCARD VAN-2 - R466</option>
+				<option value="R467">METROCARD VAN-3 - R467</option>
+				<option value="R268">METROPOLITAN AV - R268</option>
+				<option value="R100">METROPOLITAN AV - R100</option>
+				<option value="R328">METS-WILLETS PT - R328</option>
+				<option value="R427">MIDDLETOWN ROAD - R427</option>
+				<option value="R265">MONTROSE AVE - R265</option>
+				<option value="R294">MORGAN AVE - R294</option>
+				<option value="R329">MORRIS PARK - R329</option>
+				<option value="R120">MORRISON AVE - R120</option>
+				<option value="R133">MOSHOLU PARKWAY - R133</option>
+				<option value="R308">MT EDEN AVE - R308</option>
+				<option value="R087">MURRAY ST-B'WAY - R087</option>
+				<option value="R378">MYRTLE AVE - R378</option>
+				<option value="R137">MYRTLE AVE - R137</option>
+				<option value="R286">MYRTLE-WILLOUGH - R286</option>
+				<option value="R256">NASSAU AV - R256</option>
+				<option value="R230">NECK ROAD - R230</option>
+				<option value="R426">NEPTUNE AVE - R426</option>
+				<option value="R444">NEREID AVE - R444</option>
+				<option value="R056">NEVINS ST - R056</option>
+				<option value="R375">NEW LOTS AVE - R375</option>
+				<option value="R069">NEW LOTS AVE - R069</option>
+				<option value="R398">NEW UTRECHT AVE - R398</option>
+				<option value="R549">NEWARK BM BW - R549</option>
+				<option value="R549">NEWARK C - R549</option>
+				<option value="R549">NEWARK HM HE - R549</option>
+				<option value="R549">NEWARK HW BMEBE - R549</option>
+				<option value="R149">NEWKIRK AVE - R149</option>
+				<option value="R135">NEWKIRK AVE - R135</option>
+				<option value="R298">NORTHERN BLVD - R298</option>
+				<option value="R436">NORWOOD AVE - R436</option>
+				<option value="R157">NORWOOD-205 ST - R157</option>
+				<option value="R061">NOSTRAND AVE - R061</option>
+				<option value="R198">NOSTRAND AVE - R198</option>
+				<option value="R410">NYC & CO - 7 AV - R410</option>
+				<option value="R264">OCEAN PARKWAY - R264</option>
+				<option value="R459">ORCHARD BEACH - R459</option>
+				<option value="R354">OXFORD-104 ST - R354</option>
+				<option value="R057">PACIFIC ST - R057</option>
+				<option value="R029">PARK PLACE - R029</option>
+				<option value="R411">PARK PLACE - R411</option>
+				<option value="R148">PARKSIDE AVE - R148</option>
+				<option value="R114">PARSONS BLVD - R114</option>
+				<option value="R540">PATH WTC - R540</option>
+				<option value="R540">PATH WTC 2 - R540</option>
+				<option value="R546">PAVONIA/NEWPORT - R546</option>
+				<option value="R429">PELHAM BAY PARK - R429</option>
+				<option value="R361">PELHAM PARKWAY - R361</option>
+				<option value="R430">PELHAM PARKWAY - R430</option>
+				<option value="R067">PENNSYLVANIA AV - R067</option>
+				<option value="R277">PRESIDENT ST - R277</option>
+				<option value="R086">PRINCE ST-B'WAY - R086</option>
+				<option value="R454">PROSPECT AVE - R454</option>
+				<option value="R246">PROSPECT AVE - R246</option>
+				<option value="R406">PROSPECT AVE - R406</option>
+				<option value="R196">PROSPECT PARK - R196</option>
+				<option value="R140">QUEENS PLAZA - R140</option>
+				<option value="R121">QUEENSBORO PLZ - R121</option>
+				<option value="R438">RALPH AVE - R438</option>
+				<option value="R304">RECTOR ST - R304</option>
+				<option value="R227">RECTOR ST - R227</option>
+				<option value="R468">RIT-MANHATTAN - R468</option>
+				<option value="R469">RIT-ROOSEVELT - R469</option>
+				<option value="R439">ROCKAWAY AVE - R439</option>
+				<option value="R065">ROCKAWAY AVE - R065</option>
+				<option value="R385">ROCKAWAY BLVD - R385</option>
+				<option value="R419">ROCKAWAY PK 116 - R419</option>
+				<option value="R152">ROCKAWAY PKY - R152</option>
+				<option value="R018">ROOSEVELT AVE - R018</option>
+				<option value="R259">ROOSEVELT IS - R259</option>
+				<option value="R064">SARATOGA AVE - R064</option>
+				<option value="R402">SENECA AVE - R402</option>
+				<option value="R136">SHEEPSHEAD BAY - R136</option>
+				<option value="R442">SHEPHERD AVE - R442</option>
+				<option value="R408">SIMPSON ST - R408</option>
+				<option value="R270">SMITH-9 ST - R270</option>
+				<option value="R001">SOUTH FERRY - R001</option>
+				<option value="R282">SPRING ST - R282</option>
+				<option value="R322">SPRING ST - R322</option>
+				<option value="R245">ST LAWRENCE AVE - R245</option>
+				<option value="R070">ST. GEORGE - R070</option>
+				<option value="R238">STEINWAY ST - R238</option>
+				<option value="R209">STERLING ST - R209</option>
+				<option value="R151">STILLWELL AVE - R151</option>
+				<option value="R128">SUTPHIN BLVD - R128</option>
+				<option value="R024">SUTPHIN BLVD - R024</option>
+				<option value="R063">SUTTER AVE - R063</option>
+				<option value="R349">SUTTER AVE - R349</option>
+				<option value="R541">THIRTY ST - R541</option>
+				<option value="R541">THIRTY THIRD ST - R541</option>
+				<option value="R165">TOMPKINSVILLE - R165</option>
+				<option value="R154">TREMONT AVE - R154</option>
+				<option value="R542">TWENTY THIRD ST - R542</option>
+				<option value="R231">UNION ST - R231</option>
+				<option value="R158">UNION TPK-KEW G - R158</option>
+				<option value="R153">UTICA AVE - R153</option>
+				<option value="R360">VAN ALSTON-21ST - R360</option>
+				<option value="R434">VAN SICLEN AVE - R434</option>
+				<option value="R441">VAN SICLEN AVE - R441</option>
+				<option value="R068">VAN SICLEN AVE - R068</option>
+				<option value="R255">VAN WYCK BLVD - R255</option>
+				<option value="R276">VERNON/JACKSON - R276</option>
+				<option value="R138">W 4 ST-WASH SQ - R138</option>
+				<option value="R312">W 8 ST-AQUARIUM - R312</option>
+				<option value="R145">WAKEFIELD-241 - R145</option>
+				<option value="R043">WALL ST - R043</option>
+				<option value="R027">WALL ST - R027</option>
+				<option value="R091">WASHINGTON-36 A - R091</option>
+				<option value="R532">WEST COUNTY CTR - R532</option>
+				<option value="R107">WESTCHESTER SQ - R107</option>
+				<option value="R001">WHITEHALL ST - R001</option>
+				<option value="R325">WHITLOCK AVE - R325</option>
+				<option value="R295">WILSON AVE - R295</option>
+				<option value="R451">WINTHROP ST - R451</option>
+				<option value="R201">WOODHAVEN BLVD - R201</option>
+				<option value="R006">WOODHAVEN BLVD - R006</option>
+				<option value="R052">WOODLAWN ROAD - R052</option>
+				<option value="R029">WORLD TRADE CTR - R029</option>
+				<option value="R301">YORK ST - R301</option>
+				<option value="R326">ZEREGA AVE - R326</option>
+      		</select>
+      		
+      		&nbsp;&nbsp;&nbsp;
+      		
+			<!---<label class="control-label" for="dates">Date range:</label>--->
+			<i class="icon-calendar "></i> </span>
+			<input type="text" name="dates" id="dates" placeholder="MM/DD/YYY - MM/DD/YYY"/>&nbsp;&nbsp;&nbsp;
+			
+			
+			<!--<span id="dates" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+            	<i class="icon-calendar icon-large"></i>
+                <span></span> <b class="caret" style="margin-top: 8px"></b>
+            </span>&nbsp;&nbsp;&nbsp;--->
+ 			
+  			<button class="btn btn-primary chart_button"><i class="icon-bar-chart"> Chart</i></button>&nbsp;&nbsp;&nbsp;
+      		<button class="btn btn-inverse table_button"><i class="icon-table"> Data</i></button>     		
+      	
+      		<span class="pull-right">
+      			Current dataset: <span id ="lastupdate" class = "label label-warning"></span>
+      		</span>
+      	
+      	</form>
+      </div>
+      
+      <div class="row chart_container"> <!--- chart --->
+      	<!---<pre>chart goes here</pre>--->
+      	
+      	<div class="row">
+      		<span class="pull-right">
+      			<span class = "label" style="background-color:#3880aa;">Entries</span>&nbsp;
+      			<span class = "label" style="background-color:#4da944;">Exits</span>
+      		</span>
+      	</div>
+      	
+      	<figure class = "span12" id="chart" style="height: 500px;"></figure>
+      </div>
+      
+       <div class="row table_container" style="height: 500px; overflow:auto;"> <!--- data table --->
+      </div>
+      
+      <div class ="row placeholder_container">
+	  	<div class="span12">
+	  	<h3>Hi there! This app creates charts & data tables using <a href="http://www.mta.info/developers/turnstile.html" target="_blank">MTA Turnstile data</a>. 
+	  	<br/>Select a station code & time range above to get started.</h3>
+		<p>In case you're wondering, I'm <a href="nealshyam.com" target="_blank">Neal Shyam</a> and I like to make <a href="http://nealrs.github.io/LegalGrep" target="_blank">things</a>. You can find me on <a href="https://twitter.com/nealrs" target="_blank">Twitter</a> & <a href="https://github.com/nealrs/" target="_blank">Github</a>. Want this code? <a href="https://github.com/nealrs/MTA" target="_blank">It's all yours</a>.
+		<p>This app is made possible by: 
+		<ul>
+			<li><a href="http://adstruc.com" target="_blank">Team ADstruc</a></li>
+			<li><a href="https://github.com/louiedog98/nycturnstiles" target="_blank">Chris Whong's NYC Turnstile Ruby project</a></li>
+			<li><a href="http://www.mta.info/developers/" target="_blank">MTA Developer Resources</a></li>
+			<li><a href="http://github.com" target="_blank">Github</a></li>
+			<li><a href="http://twitter.github.io/bootstrap/" target="_blank">Bootstrap</a></li> 
+			<li><a href="http://momentjs.com/" target="_blank">Moment.js</a></li> 
+			<li><a href="https://github.com/dangrossman/bootstrap-daterangepicker" target="_blank">Bootstrap Date Range Picker</a></li>
+			<li><a href="http://d3js.org/" target="_blank">D3.js</a></li> 
+			<li><a href="http://tenxer.github.io/xcharts/" target="_blank">xCharts</a></li>
+			<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>
+			<li><a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font-Awesome</a></li>
+			<li><a href="http://mysql.com" target="_blank">MySQL</a></li>
+			<li><a href="http://us.php.net" target="_blank">PHP</a></li>
+			<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript?redirectlocale=en-US&redirectslug=JavaScript" target="_blank">Javascript</a></li>
+			<li><a href="http://stackoverflow.com" target="_blank">StackOverflow</a></li>
+		</ul>
+      </div> 
+           
+    </div> <!-- /container -->
+  </body>
+</html>
