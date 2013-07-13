@@ -10,6 +10,7 @@
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/daterangepicker.css" rel="stylesheet">
+    <link href="css/xcharts.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <style>
       body {
@@ -21,55 +22,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/moment.js"></script>
 	<script type="text/javascript" src="js/daterangepicker.js"></script>
-
-	<!--<script type="text/javascript">
-		$(document).ready(function() {
-  			$('input[name="dates"]').daterangepicker();
-		});
-	</script>--->
-	
-	<script type="text/javascript">
-               $(document).ready(function() {
-                  $('#dates').daterangepicker(
-                     {
-                        ranges: {
-                           'Last Week': [moment().subtract('days', 7).startOf('week'), moment().subtract('days', 7).endOf('week')], <!--- need to subtract 1 from each date here.--->
-                           'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                           'Last 3 Months': [moment().subtract('month', 3).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                        },
-                        opens: 'left',
-                        format: 'MM/DD/YYYY',
-                        separator: ' to ',
-                        startDate: moment().subtract('days', 29),
-                        endDate: new Date(),
-                        
-                       	// set min/max date manually --- or via db? (using moment.js for max, but need to reset min manually depending on oldest dataset)
-                        minDate: '02/02/2013',
-                        maxDate: moment().subtract('days', 7).endOf('week'),
-                        locale: {
-                            applyLabel: 'Submit',
-                            fromLabel: 'From',
-                            toLabel: 'To',
-                            customRangeLabel: 'Custom Range',
-                            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                            firstDay: 0
-                        },
-                        showWeekNumbers: true,
-                        buttonClasses: ['btn-danger'],
-                        dateLimit: false
-                     },
-                     function(start, end) {
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                     }
-                  );
-                  //Set the initial state of the picker label
-                  $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' to ' + moment().format('MMMM D, YYYY'));
-
-               });</script>
-
-
-
+	<script type="text/javascript" src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/xcharts.min.js"></script>
+	<script type="text/javascript" src="js/miscfunc.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -82,6 +37,15 @@
       <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  
+  
+  <!----- SHARE THIS ----->
+  	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "ur-7520ac9b-63c9-36e9-1e0c-25421b29a216", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+  <!----- SHARE THIS ----->
+  
+  
   </head>
 
   <body>
@@ -97,24 +61,26 @@
           <a class="brand" href="#">MTA Turnstile Traffic</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Feedback</a></li>
+              <li><a class = "tip" data-toggle="tooltip" title="Hi, I'm Neal Shyam" href="http://www.nealshyam.com" target="_blank">&copy; 2013 Neal</a></li>
+             <!--- <li><a class = "tip" data-toggle="tooltip" title="I did this for fun!" href="#about">About</a></li>--->
+              <li><a class = "tip" data-toggle="tooltip" title="Tell me what I can do better!" href="mailto:me@nealshyam.com?subject=MTA%20Turnstile%20Data" target="_blank">Feedback</a></li>
+              <li><a class = "tip" data-toggle="tooltip" title="Share this with your friends!"><span class='st_facebook_hcount' displayText='Facebook'></span> <span class='st_twitter_hcount' displayText='Tweet'></span> <span class='st_linkedin_hcount' displayText='LinkedIn'></span> <span class='st_pinterest_hcount' displayText='Pinterest'></span> <span class='st_email_hcount' displayText='Email'></span></a></li>
+
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
-
-    <div class="container">
-
+    <div class="container" id = "maincont">
       <div class="row"> <!--- chart controls --->
-      	<form class="form-inline span12" action="http://nealshyam.com/mta/get_data.php" method="post">
+      	<form class="form-inline span12" id ="form">
       		<!--<span class="control-level" for ="station">Station:</span>-->
       		<i class="icon-map-marker"></i> </span>	
       			<!--- populate using a db query (pull station codes + station names) & set selected based on db query too--->
       			<!--- maybe find station using map or "find station by train line" or something like that.--->
       		<select name = "remote"> 	
       			<!--<option value="">Select Station</option>-->
+      			<option value="">Select Station Remote Code</option>
       			<option value="R248">1 AVE - R248</option>
 				<option value="R191">103 ST - R191</option>
 				<option value="R314">103 ST - R314</option>
@@ -621,22 +587,65 @@
       		
 			<!---<label class="control-label" for="dates">Date range:</label>--->
 			<i class="icon-calendar "></i> </span>
-			<input type="text" name="dates" id="dates" placeholder="MM/DD/YYY - MM/DD/YYY"/>
+			<input type="text" name="dates" id="dates" placeholder="MM/DD/YYY - MM/DD/YYY"/>&nbsp;&nbsp;&nbsp;
+			
+			
+			<!--<span id="dates" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+            	<i class="icon-calendar icon-large"></i>
+                <span></span> <b class="caret" style="margin-top: 8px"></b>
+            </span>&nbsp;&nbsp;&nbsp;--->
  			
- 			&nbsp;&nbsp;&nbsp;
- 			
-  			<button type="submit" class="btn btn-primary "><i class="icon-bar-chart"> Chart it!</i></button>
+  			<button class="btn btn-primary chart_button"><i class="icon-bar-chart"> Chart</i></button>&nbsp;&nbsp;&nbsp;
+      		<button class="btn btn-inverse table_button"><i class="icon-table"> Data</i></button>     		
+      	
+      		<span class="pull-right">
+      			Current dataset: <span id ="lastupdate" class = "label label-warning"></span>
+      		</span>
       	
       	</form>
       </div>
       
-      <div class="row"> <!--- chart --->
-      	<div class = "span12">
-      		<pre>Chart goes here</pre>
+      <div class="row chart_container"> <!--- chart --->
+      	<!---<pre>chart goes here</pre>--->
+      	
+      	<div class="row">
+      		<span class="pull-right">
+      			<span class = "label" style="background-color:#3880aa;">Entries</span>&nbsp;
+      			<span class = "label" style="background-color:#4da944;">Exits</span>
+      		</span>
       	</div>
+      	
+      	<figure class = "span12" id="chart" style="height: 500px;"></figure>
       </div>
       
+       <div class="row table_container" style="height: 500px; overflow:auto;"> <!--- data table --->
+      </div>
+      
+      <div class ="row placeholder_container">
+	  	<div class="span12">
+	  	<h3>Hi there! This app creates charts & data tables using <a href="http://www.mta.info/developers/turnstile.html" target="_blank">MTA Turnstile data</a>. 
+	  	<br/>Select a station code & time range above to get started.</h3>
+		<p>In case you're wondering, I'm <a href="nealshyam.com" target="_blank">Neal Shyam</a> and I like to make <a href="http://nealrs.github.io/LegalGrep" target="_blank">things</a>. You can find me on <a href="https://twitter.com/nealrs" target="_blank">Twitter</a> & <a href="https://github.com/nealrs/" target="_blank">Github</a>. Want this code? <a href="https://github.com/nealrs/MTA" target="_blank">It's all yours</a>.
+		<p>This app is made possible by: 
+		<ul>
+			<li><a href="http://adstruc.com" target="_blank">Team ADstruc</a></li>
+			<li><a href="https://github.com/louiedog98/nycturnstiles" target="_blank">Chris Whong's NYC Turnstile Ruby project</a></li>
+			<li><a href="http://www.mta.info/developers/" target="_blank">MTA Developer Resources</a></li>
+			<li><a href="http://github.com" target="_blank">Github</a></li>
+			<li><a href="http://twitter.github.io/bootstrap/" target="_blank">Bootstrap</a></li> 
+			<li><a href="http://momentjs.com/" target="_blank">Moment.js</a></li> 
+			<li><a href="https://github.com/dangrossman/bootstrap-daterangepicker" target="_blank">Bootstrap Date Range Picker</a></li>
+			<li><a href="http://d3js.org/" target="_blank">D3.js</a></li> 
+			<li><a href="http://tenxer.github.io/xcharts/" target="_blank">xCharts</a></li>
+			<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>
+			<li><a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font-Awesome</a></li>
+			<li><a href="http://mysql.com" target="_blank">MySQL</a></li>
+			<li><a href="http://us.php.net" target="_blank">PHP</a></li>
+			<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript?redirectlocale=en-US&redirectslug=JavaScript" target="_blank">Javascript</a></li>
+			<li><a href="http://stackoverflow.com" target="_blank">StackOverflow</a></li>
+		</ul>
+      </div> 
+           
     </div> <!-- /container -->
-
   </body>
 </html>
