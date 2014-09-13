@@ -1,7 +1,7 @@
 nycturnstiles
 =============
 
-Scripts that tinker with the MTA's turnstile data
+Scripts that tinker with the MTA's turnstile data.  Used to create [this data visualization](https://www.youtube.com/watch?v=g6EaMQDHu7Q&list=UUpHtwgRedEGQz_1dm3jbi6w).
 
 turnstile.rb parses the oh-so-ugly format that the MTA delivers turnstile data in and makes each reading into a single line with the following columns:
 
